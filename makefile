@@ -1,17 +1,20 @@
 GCC = gcc
-OBJECTS = example.o progression.o
 
+all: example asm_example
 
-all: example
+asm_example: func_call.o progression.o
+	$(GCC) $^ -o $@ -g
 
-example: $(OBJECTS)
-	$(GCC) $^ -o $@
+example: example.o progression.o
+	$(GCC) $^ -o $@ -g
 
 example.o: example.c example.h
-	$(GCC) -c $<
-
+	$(GCC) -c $< -g
 
 progression.o: progression.asm
+	fasm $<
+
+func_call.o: func_call.asm
 	fasm $<
 
 .PHONY: clean
